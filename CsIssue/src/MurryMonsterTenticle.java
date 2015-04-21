@@ -23,7 +23,10 @@ public class MurryMonsterTenticle {
 	}
 
 	public Coordinate getCurrentPosition() {
-		return getPath().get(getPath().size());
+		if(path.size() >= 0){
+			return path.get(path.size()-1);
+		}
+		return null;				
 	}
 
 	public void killHead(){

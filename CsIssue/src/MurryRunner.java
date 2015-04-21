@@ -3,10 +3,12 @@ import java.util.ArrayList;
 public class MurryRunner {
 	// bradbarclay@hotmail.com
 	static ArrayList<MurryMonsterTenticle> Heads;
+	static boolean exitFound =false;
+	static int numberOfAvailablePaths = 0;
 
 	static int[][] matrix1 = //
 	{//
-	{ 0, 0, 1, 1, 1, 1, 1, 1 },//
+			{ 0, 0, 1, 1, 1, 1, 1, 1 },//
 			{ 1, 0, 0, 0, 0, 1, 0, 1 },//
 			{ 1, 1, 0, 1, 1, 0, 0, 1 },//
 			{ 1, 1, 0, 1, 1, 0, 1, 1 },//
@@ -39,7 +41,9 @@ public class MurryRunner {
 		Heads = new ArrayList<MurryMonsterTenticle>();
 		Heads.add(0, new MurryMonsterTenticle());
 		Heads.get(0).getPath().add(new Coordinate(0, 0));
-		tick();
+		while(!exitFound){
+				tick();
+		}
 	}
 
 	public static void tick() {
@@ -51,14 +55,16 @@ public class MurryRunner {
 		}
 	}
 
-	public static void checkAdjecentSpaces(MurryMonsterTenticle head) {
+	public static void checkAdjecentSpaces(MurryMonsterTenticle head) {	
+		System.out.println(head.getCurrentPosition().getValue());
+		
 		Coordinate up = null;
 		Coordinate down = null;
 		Coordinate right = null;
 		Coordinate left = null;
-		
-		if (head.getCurrentPosition().getY() >= 0
-				&& head.getCurrentPosition().getY() <= 7) {
+
+		if (head.getCurrentPosition().getY() >= 1
+				&& head.getCurrentPosition().getY() <= 6) {
 			up = new Coordinate(head.getCurrentPosition().getX(), head
 					.getCurrentPosition().getY() - 1);
 			down = new Coordinate(head.getCurrentPosition().getX(), head
@@ -66,34 +72,54 @@ public class MurryRunner {
 		}
 
 		if (head.getCurrentPosition().getX() >= 0
-				&& head.getCurrentPosition().getX() <= 6) {
+				&& head.getCurrentPosition().getX() <= 7) {
 			right = new Coordinate(head.getCurrentPosition().getX() + 1, head
 					.getCurrentPosition().getY());
+		}
+			if (head.getCurrentPosition().getX() >= 1
+					&& head.getCurrentPosition().getX() <= 7) {
 			left = new Coordinate(head.getCurrentPosition().getX() - 1, head
 					.getCurrentPosition().getY());
-		}
+			}
+		
 
-		int numberOfAvailablePaths = 0;
 		ArrayList<Coordinate> availablePaths = new ArrayList<Coordinate>();
 
-		if (1 == matrix1[up.x][up.y]) {
-			availablePaths.add(up);
+		if (up != null) {
+			if (0 == matrix1[up.getX()][up.getY()]) {
+				availablePaths.add(up);
+				numberOfAvailablePaths++;
+			}
+		}
+		
+		if (down != null) {
+			if (matrix1[down.getX()][down.getY()] == 0) {
+				availablePaths.add(down);
+				numberOfAvailablePaths++;
+			}
+		}
+		
+		if (right != null) {
+			if (matrix1[right.getX()][right.getY()] == 0) {
+				availablePaths.add(right);
+				numberOfAvailablePaths++;
+			}
 			numberOfAvailablePaths++;
-		} else if (1 == matrix1[down.x][down.y]) {
-			availablePaths.add(down);
-			numberOfAvailablePaths++;
-		} else if (1 == matrix1[right.x][right.y]) {
-			availablePaths.add(right);
-			numberOfAvailablePaths++;
-		} else if (1 == matrix1[left.x][left.y]) {
-			availablePaths.add(left);
-			numberOfAvailablePaths++;
+			
+		}
+		
+		if (left != null) {
+			if (0 == matrix1[left.getX()][left.getY()]) {
+				availablePaths.add(left);
+				numberOfAvailablePaths++;
+			}
 		}
 
 		// determine action
 		if (numberOfAvailablePaths == 0) {
 			// kill head
 			head.killHead();
+			System.out.println("A head is ded");
 		} else if (numberOfAvailablePaths == 1) {
 			// Move
 			head.getPath().add(availablePaths.get(0));
@@ -101,9 +127,16 @@ public class MurryRunner {
 			head.getPath().addAll(availablePaths);
 		}
 
+		checkOverlaps();
+		if(2 == matrix1[head.getCurrentPosition().getX()][head.getCurrentPosition().getY()]){
+			exitFound = true;
+			System.out.println("THE MURRY has found the exit");
+		}
+		
+		numberOfAvailablePaths = 0;
 	}
 
-	public void checkOverlaps() {
+	public static void checkOverlaps() {
 		ArrayList<MurryMonsterTenticle> livingHeads = new ArrayList<MurryMonsterTenticle>();
 
 		for (MurryMonsterTenticle head : Heads) {
