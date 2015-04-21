@@ -44,4 +44,11 @@ public class MurryMonsterTenticle {
 	public void setPath(ArrayList<Coordinate> path) {
 		this.path = path;
 	}
+
+	public Coordinate previousElement(){
+				return path.get(path.size()-1);
+	}
+	public Coordinate firstElement(){
+		return path.get(0);
+	}
 }
