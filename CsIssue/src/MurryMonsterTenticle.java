@@ -1,20 +1,20 @@
 import java.util.ArrayList;
 
 public class MurryMonsterTenticle {
-
-	ArrayList<Coordinate> path;
-	boolean isAlive;
-	ArrayList<MurryMonsterTenticle> link;
+	
+	private ArrayList<Coordinate> path;
+	private boolean isAlive;
+	private ArrayList<MurryMonsterTenticle> link;
 	
 	public MurryMonsterTenticle(){
-		ArrayList<Coordinate> path = new ArrayList<Coordinate>();
-		boolean isalive = true;
+		path = new ArrayList<Coordinate>();
+		isAlive = true;
 		link = new ArrayList<MurryMonsterTenticle>();
 	}
 	
 	public void addlink(MurryMonsterTenticle linkInput) {
 		link.add(linkInput);
-		this.path.add(linkInput.path.get(linkInput.path.size()));
+		this.getPath().add(linkInput.getPath().get(linkInput.getPath().size()));
 	}
 
 	
@@ -22,8 +22,23 @@ public class MurryMonsterTenticle {
 		return link.get(index);
 	}
 
-	public Coordinate getCurrentPostion() {
-		return path.get(path.size());
+	public Coordinate getCurrentPosition() {
+		return getPath().get(getPath().size());
 	}
 
+	public void killHead(){
+		this.isAlive=false;
+	}
+	
+	public boolean isAlive(){
+		return this.isAlive;
+	}
+
+	public ArrayList<Coordinate> getPath() {
+		return path;
+	}
+
+	public void setPath(ArrayList<Coordinate> path) {
+		this.path = path;
+	}
 }
