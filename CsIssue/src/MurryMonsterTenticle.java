@@ -12,9 +12,11 @@ public class MurryMonsterTenticle {
 		link = new ArrayList<MurryMonsterTenticle>();
 	}
 	
-	public void addlink(MurryMonsterTenticle linkInput) {
-		link.add(linkInput);
-		this.getPath().add(linkInput.getPath().get(linkInput.getPath().size()));
+	public void addParentCoordinates(MurryMonsterTenticle parentInput) {
+		ArrayList<Coordinate> temp = new ArrayList<Coordinate>();
+		temp.addAll(parentInput.getPath());
+		temp.addAll(this.path);
+		path = temp;
 	}
 
 	
@@ -46,7 +48,10 @@ public class MurryMonsterTenticle {
 	}
 
 	public Coordinate previousElement(){
-				return path.get(path.size()-1);
+		if(path.size() <= 1){
+				return null;
+		}
+		return path.get(path.size()-2);
 	}
 	public Coordinate firstElement(){
 		return path.get(0);
